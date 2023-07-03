@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blog-web-app
+spec:
+  selector:
+    matchLabels:
+      app: blog-web-app
+  template:
+    metadata:
+      labels:
+        app: blog-web-app
+    spec:
+      containers:
+      - name: blog-web-app
+        env:
+          - name: NEXT_PUBLIC_FIREBASE_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: frontend-secret
+                key: NEXT_PUBLIC_FIREBASE_API_KEY
+          - name: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+            valueFrom: 
+              secretKeyRef:
+                name: frontend-secret
+                key: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+          - name: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+            valueFrom:
+              secretKeyRef:
+                name: frontend-secret
+                key: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+          - name: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+            valueFrom:
+              secretKeyRef:
+                name: frontend-secret
+                key: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+          - name: NEXT_PUBLIC_FIREBASE_APP_ID
+            valueFrom:
+              secretKeyRef:
+                name: frontend-secret
+                key: NEXT_PUBLIC_FIREBASE_APP_ID
+          - name: NEXT_PUBLIC_BACKEND
+            valueFrom:
+              secretKeyRef:
+                name: frontend-secret
+                key: NEXT_PUBLIC_BACKEND
+            
+        image: davepokpong/blog-web-app-frontend:latest
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 3000
